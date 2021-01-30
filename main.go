@@ -5,6 +5,8 @@ import (
 )
 
 func main() {
+	//SkinstoreModule.Initialize()
+	//SkinstoreModule.AddSkin("TEST", []byte{})
 }
 
 // SkinstoreModule is a thing

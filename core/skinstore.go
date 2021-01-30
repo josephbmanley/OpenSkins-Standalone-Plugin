@@ -45,6 +45,14 @@ func (s *SkinstoreStandalone) Initialize() error {
 		return err
 	}
 
+	if _, err := os.Stat(config.SkinDirectory); err != nil {
+		if !os.IsNotExist(err) {
+			return err
+		}
+
+		os.Mkdir(config.SkinDirectory, 0755)
+	}
+
 	return nil
 }
 
@@ -86,7 +94,7 @@ func (s *SkinstoreStandalone) AddSkin(skinID string, fileData []byte) error {
 			return err
 		}
 
-		// Crate file if it didn't exist
+		// Create file if it didn't exist
 		if _, err := os.Create(skinPath); err != nil {
 			return err
 		}
@@ -109,17 +117,17 @@ func (s *SkinstoreStandalone) AddSkin(skinID string, fileData []byte) error {
 }
 
 // DeleteSkin deletes a skin object
-func (s *SkinstoreStandalone) DeleteSkin(skinID string) error {
-	skinPath := fmt.Sprintf("%v/%v", config.SkinDirectory, skinID)
+// func (s *SkinstoreStandalone) DeleteSkin(skinID string) error {
+// 	skinPath := fmt.Sprintf("%v/%v", config.SkinDirectory, skinID)
 
-	// Check if skin exists
-	if _, err := os.Stat(skinPath); err != nil {
-		// Check if error was not 404 error
-		if !os.IsNotExist(err) {
-			return err
-		}
-		return nil
-	}
+// 	// Check if skin exists
+// 	if _, err := os.Stat(skinPath); err != nil {
+// 		// Check if error was not 404 error
+// 		if !os.IsNotExist(err) {
+// 			return err
+// 		}
+// 		return nil
+// 	}
 
-	return os.Remove(skinPath)
-}
+// 	return os.Remove(skinPath)
+// }

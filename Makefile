@@ -4,7 +4,6 @@ PROJECTNAME="OpenSkins-Standalone-Plugin"
 
 # Go related variables.
 GOBASE=$(shell pwd)
-GOPATH=$(GOBASE)/vendor:$(GOBASE)
 GOBIN=$(GOBASE)/bin
 GOFILES=$(wildcard *.go)
 
@@ -21,34 +20,38 @@ go-compile: go-clean go-get go-build
 
 go-build:
 	@echo "  >  Building binary..."
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -buildmode=plugin -o $(GOBIN)/$(PROJECTNAME) $(GOFILES)
+	@go build -buildmode=plugin -o $(GOBIN)/$(PROJECTNAME) $(GOFILES)
 
 go-generate:
 	@echo "  >  Generating dependency files..."
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go generate $(generate)
+	@go generate $(generate)
 
 go-get:
 	@echo "  >  Checking if there is any missing dependencies..."
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go get $(get)
+	@go get $(get)
 
 go-install:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go install $(GOFILES)
+	@go install $(GOFILES)
 
 go-clean:
 	@echo "  >  Cleaning build cache"
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
+	@go clean
 
 go-test:
 	@echo "  >  Running tests..."
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go test
+	@go test
 
 go-run:
 	@echo "  >  Running ${PROJECTNAME}"
 	@-(cd $(GOBIN); ./$(PROJECTNAME))
 
+openskins-common:
+	@echo "  >  Updating common library..."
+	@go get -u github.com/josephbmanley/OpenSkins-Common
+
 
 ## install: downloads and installs dependencies
-install: go-get
+install: openskins-common go-get
 
 ## clean: test
 clean:
